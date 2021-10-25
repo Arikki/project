@@ -1,0 +1,41 @@
+<!-- <div class = "nav navbar-nav navbar-right">
+    <a href=#>Logout</a>
+</div> -->
+<!-- 
+<div class="container">
+    <div class="row">
+
+      
+    
+        <ul class="nav navbar-nav navbar-right">
+         
+            <a [routerLink]="" (click)='onLogout()'>Logout</a>
+        </ul>
+        
+        </div>
+        </div> -->
+
+        <!-- <div>
+            <button class="btn btn-primary" type ="submit" (click)='sampleReq()'>Sample</button>
+          </div>  -->
+          <!-- <div class="container"> -->
+
+
+            <div class="row"  >
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" ><a [routerLink]="['/home','register']">Registration</a></li>
+                  <li role="presentation" ><a [routerLink]="['/home','claims']">Claims</a></li>
+                  <li role="presentation" ><a [routerLink]= "['/home','updateProfile']">Update Profile</a></li>
+                  <!-- <li role="presentation"  routerLink="active"></li> -->
+                  <li role =  "presentation" class="pull-right">  <a [routerLink]="" (click)='onLogout()'>Logout</a></li>
+                </ul>
+                
+              </div>
+            </div>
+           
+            
+
+        <div>
+          <router-outlet></router-outlet>
+        </div>

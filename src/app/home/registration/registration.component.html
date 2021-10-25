@@ -1,0 +1,160 @@
+<br>
+<!-- 
+    <form >
+  
+        <div class="col-md-4">
+            <div class="form-row">
+        <div class ="col" >
+            <input type ="text" id = "firstName"   class="form-control" name = "firstName" placeholder="First Name" ngModel  />
+        </div>
+
+
+        <div class = " col">
+            <input type ="text" id = "lastName" class="form-control" name = "lastName" placeholder="Last Name" ngModel  />
+        </div>
+    </div>
+   
+</div>
+    </form> -->
+    <!-- <div class="alert alert-danger" *ngIf="isError && !isRegistered">
+        <p class="text-center">{{error}}</p>
+    </div>
+    <div class ="alert alert-success"  *ngIf="isRegistered && !isError">
+        <p class="text-center">SuccessFully Registered!</p>
+        
+    </div> -->
+    <form class="jumbotron" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" >
+        <div class="alert alert-danger" *ngIf="isError && !isRegistered">
+            <p class="text-center">{{error}}</p>
+        </div>
+        <div class ="alert alert-success"  *ngIf="isRegistered && !isError">
+            <p class="text-center">SuccessFully Registered!</p>
+            
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <!-- <div class="alert alert-danger" *ngIf=error>
+                    <p>{{error}}</p>
+                </div> -->
+              <label for="firstName">First Name:</label>
+              <input type="text"  id = "firstName"  class="form-control" name = "firstName" placeholder="First Name"  ngModel>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="lastName">Last Name:</label>
+              <input type="text" class="form-control" id="lastName"  name = "lastName" placeholder="Last Name"  ngModel>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="dateOfBirth">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob"  name = "dob" placeholder="Date Of Birth"  ngModel>
+              </div>
+        </div>
+   <div class ="form-row">
+        <div class="form-group col-md-12">
+            <label for="address">Address:</label>
+            <input type="text"  id = "address"  class="form-control" name = "address" placeholder="Address"  ngModel>
+        </div>
+          <!-- <div class="form-group col-md-8">
+            <label for="address2">Address 2:</label>
+            <input type="text"  id = "address2"  class="form-control" name = "address2" placeholder="Address 2" required ngModel/>
+        </div>  -->
+    
+    </div> 
+           
+      
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                
+                <label for="country">Country:</label><br>
+                <!-- <input type="text"  id="country" class="form-control"  name = "country" placeholder="Country"  ngModel> -->
+                <select id = "country" name = "country" [(ngModel)]="selectedCtryName" (change)="getStates()" style="width:100%">
+                    <option *ngFor="let item of countries" value = "{{item.name}}">{{item.name}}</option>
+                </select>
+              </div>
+   
+              <div class="form-group col-md-3">
+                <label for="state">State:</label><br>
+                <!-- <input type="text"  id = "state"  class="form-control" name = "state" placeholder="State"  ngModel> -->
+                <select id = "state" name = "state" [(ngModel)]="selectedStateName" (change)="getDistricts()" style="width:100%" >
+                    <option *ngFor="let item of states" value = "{{item.name}}">{{item.name}}</option>
+                </select>
+              </div>
+            <div class="form-group col-md-3">
+              <label for="district">District:</label> <br>
+              <!-- <input type="text"  id = "district"  class="form-control" name = "district" placeholder="District"  ngModel> -->
+              <select id = "district" name = "district" ngModel style="width:100%" >
+                <option *ngFor="let item of districts" value = "{{item.name}}">{{item.name}}</option>
+            </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="email">Email ID:</label>
+                <!-- <input type="email"  id = "email"  class="form-control" name = "email" placeholder="Email ID"   [(ngModel)]="currUser.email" value = "{{currUser.email}}" disabled> -->
+                <input type="text"  id = "email"  class="form-control" name = "email" placeholder="Email Id"  ngModel> 
+            </div>
+              <div class="form-group col-md-3">
+                <label for="contactNumber">Contact Number:</label>
+                <input type="text"  id = "contactNumber"  class="form-control" name = "contactNumber" placeholder="Contact Number"  ngModel>
+              </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="panCardNum">Pan Card Number:</label>
+                <input type="text"  id="panCardNum" class="form-control"  name = "panCardNum" placeholder="panCardNum"  ngModel>
+            </div>
+            
+            <div class="form-group col-md-3">
+                <label for="firstName">First Name (Dependent 1):</label>
+                <input type="text"  id="firstNameDep1" class="form-control"  name = "firstNameDep1" placeholder=" Dependent1's First Name"  ngModel>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="lastName">Last Name (Dependent 1):</label>
+                <input type="text"  id="lastNameDep1" class="form-control"  name = "lastNameDep1" placeholder=" Dependent1's Last Name"  ngModel>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dateOfBirth">Date Of Birth (Dependent 1):</label>
+                <input type="date"  id="dobDep1" class="form-control"  name = "dobDep1" placeholder=" Dependent1's DOB"  ngModel>
+            </div>
+        </div>
+      
+        <div class="form-row">          
+            <div class="form-group col-md-3">
+                <label for="firstName">First Name (Dependent 2):</label>
+                <input type="text"  id="firstNameDep2" class="form-control"  name = "firstNameDep2" placeholder=" Dependent2's First Name"  ngModel>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="lastName">Last Name (Dependent 2):</label>
+                <input type="text"  id="lastNameDep2" class="form-control"  name = "lastNameDep2" placeholder=" Dependent2's Last Name"  ngModel>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dateOfBirth">Date Of Birth (Dependent 2):</label>
+                <input type="date"  id="dobDep2" class="form-control"  name = "dobDep2" placeholder=" Dependent2's DOB"  ngModel>
+            </div>
+            
+        </div>
+        <div class="form-row" *ngIf="isRegistered">          
+            <div class="form-group col-md-3">
+                <label for="memberId">Member Id (Subscriber):</label>
+                <input type="text"  id="memberId" class="form-control"  name = "memberId" placeholder="Memeber Id"  [(ngModel)]="profile.memberId" disabled>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="memberId1">Member Id (Dependent 1):</label>
+                <input type="text"  id="memberId1" class="form-control"  name = "memberId1" placeholder="Dependent1's Member Id"  [(ngModel)]="profile.dependents[0].memberId" disabled>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="memberId2">Member Id (Dependent 2):</label>
+                <input type="text"  id="memberId2" class="form-control"  name = "memberId2" placeholder=" Dependent2's Member Id"  [(ngModel)]="profile.dependents[1].memberId" disabled>
+            </div>
+            
+        </div><br>
+        
+        
+        <div class="text-center" *ngIf="!isRegistered" >
+            <button class="btn btn-primary" type ="submit" [disabled] = "!registerForm.valid">Register</button>
+          
+        </div>
+            
+          
+        
+    </form>
+
+   
