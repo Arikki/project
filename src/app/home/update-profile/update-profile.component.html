@@ -1,32 +1,29 @@
 <br>
 
-    <div class="container" *ngIf="!rcvdProfile">
+    <!-- <div class="container" *ngIf="!rcvdProfile">
         <div class="alert alert-danger" *ngIf="isError && !rcvdProfile">
             <p class="text-center">{{error}}</p>
-        </div>
-        <!-- <div class="jumbotron vertical-center"> -->
-            <div class="well">
-            <!-- <div class="alert alert-danger" *ngIf=error>
-                <p>{{error}}</p>
-            </div> -->
+        </div> -->
+      
+            <!-- <div class="well">
+           
             
             <label for="email">Please enter registered Email Id:</label>
-            <!-- <input type="email"  id = "email"  class="form-control" name = "email" placeholder="Email ID"   [(ngModel)]="currUser.email" value = "{{currUser.email}}" disabled> -->
             <input type="text"  id = "email"  class="form-control" name = "email" placeholder="Email Id" (focus)="onFocus()" [(ngModel)]="email" (keyup.enter)="getProfile()" style="width:40%"> 
      
         </div>
         <div class="text-center" >
             <button class="btn btn-primary" type ="submit" (click)="getProfile()">Search</button>
-            </div>
-    </div>
-    <div class="alert alert-danger" *ngIf="rcvdProfile && isError && !isUpdated">
+            </div> -->
+    <!-- </div> -->
+    <div class="alert alert-danger" *ngIf="isError && !isUpdated" >
         <p class="text-center">{{error}}</p>
     </div>
-    <div class ="alert alert-success"  *ngIf="rcvdProfile && isUpdated && !isError">
+    <div class ="alert alert-success"  *ngIf="isUpdated && !isError">
         <p class="text-center">SuccessFully Updated!</p>
         
     </div>
-    <form #registerForm="ngForm" (ngSubmit)="updateProfile()" *ngIf="rcvdProfile" >
+    <form #registerForm="ngForm" (ngSubmit)="updateProfile()" >
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="firstName">First Name:</label>
@@ -45,7 +42,7 @@
         <div class ="form-row">
             <div class="form-group col-md-12">
                 <label for="address">Address:</label>
-                <input type="text"  id = "address"  class="form-control" name = "address" placeholder="Address"  [(ngModel)]="rcvdProfile.address" >
+                <input type="text"  id = "address"  class="form-control" name = "address" placeholder="Address" [(ngModel)]="rcvdProfile.address" >
             </div>        
         </div> 
 
@@ -91,11 +88,11 @@
             
             <div class="form-group col-md-3">
                 <label for="firstName">First Name (Dependent 1):</label>
-                <input type="text"  id="firstNameDep1" class="form-control"  name = "firstNameDep1" placeholder=" Dependent1's First Name"  [(ngModel)]="rcvdProfile.dependents[0].firstName" disabled>
+                <input type="text"  id="firstNameDep1" class="form-control"  name = "firstNameDep1" placeholder=" Dependent1's First Name"  [(ngModel)]="rcvdProfile.dependents[0].firstName" [disabled]="!isNewUser">
             </div>
             <div class="form-group col-md-3">
                 <label for="lastName">Last Name (Dependent 1):</label>
-                <input type="text"  id="lastNameDep1" class="form-control"  name = "lastNameDep1" placeholder=" Dependent1's Last Name"  [(ngModel)]="rcvdProfile.dependents[0].lastName" disabled>
+                <input type="text"  id="lastNameDep1" class="form-control"  name = "lastNameDep1" placeholder=" Dependent1's Last Name"  [(ngModel)]="rcvdProfile.dependents[0].lastName" [disabled]="!isNewUser">
             </div>
             <div class="form-group col-md-3">
                 <label for="dateOfBirth">Date Of Birth (Dependent 1):</label>
@@ -106,11 +103,11 @@
         <div class="form-row">          
             <div class="form-group col-md-3">
                 <label for="firstName">First Name (Dependent 2):</label>
-                <input type="text"  id="firstNameDep2" class="form-control"  name = "firstNameDep2" placeholder=" Dependent2's First Name"  [(ngModel)]="rcvdProfile.dependents[1].firstName" disabled>
+                <input type="text"  id="firstNameDep2" class="form-control"  name = "firstNameDep2" placeholder=" Dependent2's First Name"  [(ngModel)]="rcvdProfile.dependents[1].firstName" [disabled]="!isNewUser">
             </div>
             <div class="form-group col-md-3">
                 <label for="lastName">Last Name (Dependent 2):</label>
-                <input type="text"  id="lastNameDep2" class="form-control"  name = "lastNameDep2" placeholder=" Dependent2's Last Name"  [(ngModel)]="rcvdProfile.dependents[1].lastName" disabled>
+                <input type="text"  id="lastNameDep2" class="form-control"  name = "lastNameDep2" placeholder=" Dependent2's Last Name"  [(ngModel)]="rcvdProfile.dependents[1].lastName" [disabled]="!isNewUser">
             </div>
             <div class="form-group col-md-3">
                 <label for="dateOfBirth">Date Of Birth (Dependent 2):</label>
@@ -119,19 +116,19 @@
             
         </div>
         <div class="form-row" >          
-            <div class="form-group col-md-3">
-                <label for="memberId">Member Id (Subscriber):</label>
-                <input type="text"  id="memberId" class="form-control"  name = "memberId" placeholder="Memeber Id"  [(ngModel)]="rcvdProfile.memberId" disabled>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="memberId1">Member Id (Dependent 1):</label>
-                <input type="text"  id="memberId1" class="form-control"  name = "memberId1" placeholder="Dependent1's Member Id"  [(ngModel)]="rcvdProfile.dependents[0].memberId" disabled>
+            <div class="form-group col-md-3" >
+                <label for="memberId" *ngIf = "!isNewUser">Member Id (Subscriber):</label>
+                <input type="text"  id="memberId" class="form-control"  name = "memberId" placeholder="Memeber Id" *ngIf = "!isNewUser" [(ngModel)]="rcvdProfile.memberId" disabled>
             </div>
             <div class="form-group col-md-3" >
-                <label for="memberId2">Member Id (Dependent 2):</label>
-                <input type="text"  id="memberId2" class="form-control"  name = "memberId2" placeholder=" Dependent2's Member Id"  [(ngModel)]="rcvdProfile.dependents[1].memberId" disabled>
+                <label for="memberId1" *ngIf = "!isNewUser">Member Id (Dependent 1):</label>
+                <input type="text"  id="memberId1" class="form-control"  name = "memberId1" placeholder="Dependent1's Member Id" *ngIf = "!isNewUser"  [(ngModel)]="rcvdProfile.dependents[0].memberId" disabled>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3" >
+                <label for="memberId2" *ngIf = "!isNewUser">Member Id (Dependent 2):</label>
+                <input type="text"  id="memberId2" class="form-control"  name = "memberId2" placeholder=" Dependent2's Member Id" *ngIf = "!isNewUser"  [(ngModel)]="rcvdProfile.dependents[1].memberId" disabled>
+            </div>
+            <div class="form-group col-md-4" >
                 <!-- <label for="memberId2">Member Id (Dependent 2):</label>
                 <input type="text"  id="memberId2" class="form-control"  name = "memberId2" placeholder=" Dependent2's Member Id"  [(ngModel)]="rcvdProfile.dependents[1].memberId" disabled> -->
           
@@ -141,7 +138,8 @@
         
         <div class="form-row" >
             <div class="form-group col-md-4">
-            <button class="btn btn-primary" type ="submit" *ngIf ="!isUpdated">Update</button>
+            <!-- <button class="btn btn-primary" type ="submit" *ngIf ="!isUpdated">Update</button> -->
+            <button class="btn btn-primary" type ="submit">Update</button>
           </div>
         </div>
      

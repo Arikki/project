@@ -1,10 +1,11 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, JsonpClientBackend } from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {throwError, Subject,BehaviorSubject } from 'rxjs';
 import {User} from './user.model';
 import { Router } from "@angular/router";
+import { UserDetail } from "./userDetail.model";
 
 interface AuthResponseData{
     type :string;
@@ -31,36 +32,16 @@ constructor(private http: HttpClient, private router:Router){
 
 
 signUp(form:NgForm){
-    
-    
-    
-  // return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBWgPVmI3C8eSCuSmnuo7evst-r-sbtEvA',
-//   
-//     {
-//      email: form.value.email,
-//      password: form.value.password,
-//      returnSecureToken: true
-//     }
-    
-//      ).pipe(catchError(     //Pipe is used to operate on observable and return an observable.
-//          errorResp => {
-//              let errorMsg = "An error occured!";
-//              if(!errorResp.error || !errorResp.error.error){
-//                 return throwError (errorMsg);
-//              }
-//              switch (errorResp.error.error.message){
-//                  case 'EMAIL_EXISTS':
-//                      errorMsg = 'Email Already Exists!';
-//              }
-//              return throwError (errorMsg);
-//          }
-//      ));
+
+    const userDetail = new UserDetail(form.value.firstName, form.value.lastName, form.value.dateOfBirth, form.value.email)
+    localStorage.setItem('userDetail',JSON.stringify(userDetail))
 
   return this.http.post<AuthResponseData>('http://localhost:8080/signup',
     {
-        type:"signup",
+        
         firstName:form.value.firstName,
         lastName:form.value.lastName,
+        dateOfBirth:form.value.dateOfBirth,
      email: form.value.email,
      password: form.value.password
     
@@ -86,36 +67,19 @@ signUp(form:NgForm){
          this.user.next(user);
          this.autoLogout(+respData.tokenExpiresIn);
          localStorage.setItem('userInfo',JSON.stringify(user))
+        
+       
+         
      }));
 
-
+   
 
 }
 
 login(form:NgForm){
-    // return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBWgPVmI3C8eSCuSmnuo7evst-r-sbtEvA', 
-    // {
-    //     email: form.value.email,
-    //     password: form.value.password,
-    //     returnSecureToken: true
-    // }).pipe(catchError(
-    //     errorResp => {
-    //         let errorMsg = "An error occured!";
-    //         if(!errorResp.error || !errorResp.error.error){
-    //             return throwError (errorMsg);
-    //          }
-    //          switch (errorResp.error.error.message){
-              
-    //             case 'INVALID_PASSWORD':
-    //                 errorMsg = "Invalid Password!"
-    //         }
-    //         return throwError (errorMsg);
-    //     }
-    // ));
-
     return this.http.post<AuthResponseData>('http://localhost:8080/login',
     {
-        type: "login",
+      
         email: form.value.email,
         password: form.value.password
     }).pipe(catchError(
@@ -166,8 +130,12 @@ autoLogin(){
 
 logout(){
     this.user.next(null);
-    this.router.navigate(['/auth']);
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('userDetail');
+    this.router.navigate(['/auth']) .then(() => {
+        window.location.reload();
+      });
+    
     if (this.timeLengthExceeded){
         this.timeLengthExceeded =null;
     }

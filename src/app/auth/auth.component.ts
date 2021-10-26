@@ -20,6 +20,7 @@ export class AuthComponent implements OnInit {
   // constructor(private http: HttpClient){}
   constructor(private authService: AuthService, private router:Router){}
   ngOnInit(): void {
+   
   }
 
   loginMode(){
@@ -31,9 +32,11 @@ export class AuthComponent implements OnInit {
   }
 
   signUpMode(){
+    console.log("Inside Sign up mode()")
     this.isSignUpMode = true;
     this.isLoginMode =false;
     this.showError = false;
+   
 
   }
 
@@ -55,7 +58,12 @@ export class AuthComponent implements OnInit {
       this.authService.signUp(form).subscribe(
        respData => {
          console.log(respData);
-         this.router.navigate(['/home']);
+        // if (this.isSignedUpUser){
+      this.router.navigate(['/home','updateProfile'])
+    // }
+    // else{
+    //   this.router.navigate(['/home','claims'])
+    // }
        },
        errorMsg => {
          console.log(errorMsg);
@@ -71,7 +79,12 @@ export class AuthComponent implements OnInit {
       this.authService.login(form).subscribe(
         respData => {
           console.log(respData);
-          this.router.navigate(['/home']);
+           // if (this.isSignedUpUser){
+    //   this.router.navigate(['/home','updateProfile'])
+    // }
+    // else{
+      this.router.navigate(['/home','claims'])
+    // }
         },
         errorMsg => {
           console.log(errorMsg);

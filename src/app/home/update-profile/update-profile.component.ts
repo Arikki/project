@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserDetail } from 'src/app/auth/userDetail.model';
 
 
 import { HomeService } from '../home.service';
@@ -19,12 +21,20 @@ states:Array<any>;
 selectedCtryName:string;
 selectedStateName:string;
 districts:Array<any>;
-savedProfile:Profile= null;
-  constructor(private updateProfileSvc:UpdateProfileService, private homeService:HomeService, private router:Router) { }
-  rcvdProfile:Profile = null;
+savedData:UserDetail= null;
+rcvdProfile:Profile;
+isNewUser:boolean=false;
+doNotDisplay:boolean = true;
+
+  constructor(private updateProfileSvc:UpdateProfileService, private homeService:HomeService, 
+    private router:Router, private authService:AuthService) {
+     
+     }
+  
   isUpdated:boolean=false;
   isError:boolean=false;
   error:string;
+  
   ngOnInit(): void {
     this.countries = this.homeService.getCountries();
     this.router.routeReuseStrategy.shouldReuseRoute=() => {
@@ -33,16 +43,77 @@ savedProfile:Profile= null;
     // console.log("Counties ==>" + Country.getAllCountries())
     // console.log("States ==>" + State.getAllStates())
     // console.log("Cities ==>" + City.getAllCities())
+    
+    this.getProfile();
   }
 
   // onSubmit(form:NgForm){
 
   // }
 
+  doNotDisp(){
+this.doNotDisplay = false
+  }
+
   getProfile(){
-if (!this.rcvdProfile){
+
   
-  this.homeService.getProfile(this.email).subscribe(
+ // this.savedData = new UserDetail (savedUserData.firstName,savedUserData.lastName,savedUserData.dateOfBirth,savedUserData.email);
+ console.log("is new user ==> "+ this.authService.isNewUser)
+ this.isNewUser = this.authService.isNewUser;
+   if(this.isNewUser){
+    
+    const savedUserData:{
+      firstName:string;
+      lastName:string;
+      dateOfBirth:string;
+      email:string
+   } = JSON.parse(localStorage.getItem('userDetail'));
+     console.log("Inside Saved user data if")
+     console.log(savedUserData)
+     this.rcvdProfile ={
+        
+      "firstName":savedUserData.firstName,
+      "lastName":savedUserData.lastName,
+      "dob":savedUserData.dateOfBirth,
+      "age":0,
+      "address":"",
+      "district":"",
+      "state":"",
+      "country":"",
+      "emailId":savedUserData.email,
+      "contactNum":"",
+      "panCrdNum":"",
+      "memberId":"",
+      "dependents":
+      [
+      {
+      "memberId":"",
+      "firstName":"",
+      "lastName":"",
+      "dob":""
+      },
+      {
+      "memberId":"",
+      "firstName":"",
+      "lastName":"",
+      "dob":""
+      }
+      ]
+
+     }
+    
+     console.log("name saved in cookie =>" + this.rcvdProfile.firstName)
+   }
+   else{
+
+    const savedUserData:{
+      email:string;
+      _token:string;
+      _tokenExpirationDate:Date
+  } = JSON.parse(localStorage.getItem('userInfo'));
+
+   this.homeService.getProfile(savedUserData.email).subscribe(
     respData => {
     console.log(respData);
      this.rcvdProfile=respData;
@@ -55,10 +126,12 @@ if (!this.rcvdProfile){
       console.log(errorMsg);
       this.isError = true;
       this.error = errorMsg;
+     
 
     }
    );
-}
+
+  }
   }
 
   onFocus(){
@@ -88,20 +161,30 @@ if (!this.rcvdProfile){
       //   console.log("dob updated")
       // }
 
-      this.updateProfileSvc.updateProfile(this.rcvdProfile).subscribe(
+      console.log(this.rcvdProfile)
+
+      this.updateProfileSvc.updateProfile(this.rcvdProfile,this.isNewUser).subscribe(
         respData => {
           console.log(respData);
-         
+          this.rcvdProfile=respData;
             this.isUpdated=true;
             this.isError=false;
+            
+            if(this.isNewUser){
+              this.isNewUser = false
+              this.authService.isNewUser = false
+            }
           },
           errorMsg => {
             console.log(errorMsg);
+            this.isError = true;
+            this.isUpdated=false;
             this.error = errorMsg;
-      this.isError = true;
+            
+    
           }
       )
 
-    }
-
+    
+  }
 }

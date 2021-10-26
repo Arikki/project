@@ -86,7 +86,7 @@ fdescribe('updateProfileService',()=>{
             ]
         };
 
-        updateProfileSvc.updateProfile(dataToApi).subscribe(
+        updateProfileSvc.updateProfile(dataToApi,false).subscribe(
             profile => {
                 expect(profile).toBeTruthy();
                 
