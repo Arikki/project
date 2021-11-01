@@ -7,7 +7,7 @@ export class Profile{
     district:string;
     state:string;
     country:string;
-    emailId:string;
+    email:string;
     contactNum:string;
     panCrdNum:string;
     memberId:string;

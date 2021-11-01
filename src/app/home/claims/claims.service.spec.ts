@@ -5,7 +5,7 @@ import { Claim } from "../claim.model";
 import { ClaimsService } from "./claims.service";
 
 
-fdescribe('ClaimsService', ()=>{
+describe('ClaimsService', ()=>{
 
     let claimsSvc:ClaimsService;
     let httpTestingController:HttpTestingController
@@ -17,6 +17,7 @@ fdescribe('ClaimsService', ()=>{
               
             ]
         });
+        localStorage.clear()
 
         claimsSvc = TestBed.inject(ClaimsService);
         httpTestingController = TestBed.inject(HttpTestingController);
@@ -50,7 +51,7 @@ fdescribe('ClaimsService', ()=>{
             "claimNumber": "",
             "dischargeDate": "2021-10-01",
             "dob": "1996-11-04",
-            "emailId": "abc@gmail.com",
+            "email": "abc@gmail.com",
             "firstName": "Rick",
             "lastName": "Sanchez",
             "memberId": "R-123",
@@ -63,7 +64,7 @@ fdescribe('ClaimsService', ()=>{
             "claimNumber": "9874561230",
             "dischargeDate": "2021-10-01",
             "dob": "1996-11-04",
-            "emailId": "abc@gmail.com",
+            "email": "abc@gmail.com",
             "firstName": "Rick",
             "lastName": "Sanchez",
             "memberId": "R-123",

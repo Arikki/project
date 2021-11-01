@@ -5,16 +5,16 @@ import {throwError, Subject} from 'rxjs';
 
 import { City, Country, State } from "country-state-city";
 import { Profile } from "./profile.model";
+import { Router } from "@angular/router";
 
 @Injectable({providedIn:'root'})
 export class HomeService{
-    
+  needBasicDetail:boolean =false;
   
     selectedCtryIso:string;
     constructor(private http:HttpClient){
 
     }
-
 
 getCountries(){
     return Country.getAllCountries();
@@ -48,13 +48,34 @@ return State.getStatesOfCountry(this.selectedCtryIso)
                    }
       
                   errorMsg = errorResp.error.message;
-                   
+                  if (errorMsg.includes('Email not found')){
+                    console.log("Inside if condition of getprofile()")
+                   this.needBasicDetail = true;
+                  }
+                 
                   return throwError (errorMsg);
                 })
               );
     
         }
     
-  
+  getBasicDetails(email:string){
+    const url = 'http://localhost:8080/basicDetails/'+email;
+    return  this.http.get<Profile>(url).pipe(
+      catchError((errorResp) => {
+        let errorMsg = "An error occured!";
+        if(!errorResp.error){
+            
+            return throwError (errorMsg);
+         }
+
+        errorMsg = errorResp.error.message;
+       
+        return throwError (errorMsg);
+      })
+    );
+
+
+  }
 
 }

@@ -1,6 +1,6 @@
 export class Claim{
 
-    emailId:string;
+    email:string;
     memberId:string;
     firstName:string;
     lastName:string;

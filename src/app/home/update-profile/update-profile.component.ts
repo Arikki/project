@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserDetail } from 'src/app/auth/userDetail.model';
+import { ClaimsService } from '../claims/claims.service';
 
 
 import { HomeService } from '../home.service';
@@ -13,7 +14,7 @@ import { UpdateProfileService } from './update-profile.service';
   templateUrl: './update-profile.component.html',
   styleUrls: ['./update-profile.component.css']
 })
-export class UpdateProfileComponent implements OnInit {
+export class UpdateProfileComponent implements OnInit, OnDestroy {
 
   email:string;
    countries:Array<any>;
@@ -25,26 +26,50 @@ savedData:UserDetail= null;
 rcvdProfile:Profile;
 isNewUser:boolean=false;
 doNotDisplay:boolean = true;
-
+isLoaded:boolean = false;
+ savedUserDetail:{
+  firstName:string;
+  lastName:string;
+  dateOfBirth:string;
+  email:string
+} = JSON.parse(localStorage.getItem('userDetail'));
+ savedUserInfo:{
+  email:string;
+  _token:string;
+  _tokenExpirationDate:Date
+} = JSON.parse(localStorage.getItem('userInfo'));
   constructor(private updateProfileSvc:UpdateProfileService, private homeService:HomeService, 
     private router:Router, private authService:AuthService) {
      
      }
+  ngOnDestroy(): void {
+    
+  }
   
   isUpdated:boolean=false;
   isError:boolean=false;
   error:string;
   
   ngOnInit(): void {
+    //rcvdProfile:Profile;
+    
     this.countries = this.homeService.getCountries();
+    
     this.router.routeReuseStrategy.shouldReuseRoute=() => {
       return false;
     }
+    
+    console.log("this.homeservice ==>" +this.homeService.needBasicDetail )
     // console.log("Counties ==>" + Country.getAllCountries())
     // console.log("States ==>" + State.getAllStates())
     // console.log("Cities ==>" + City.getAllCities())
-    
+   
+    if (this.homeService.needBasicDetail){
+
+      this.getBasicDetail()
+    }else{
     this.getProfile();
+    }
   }
 
   // onSubmit(form:NgForm){
@@ -53,8 +78,68 @@ doNotDisplay:boolean = true;
 
   doNotDisp(){
 this.doNotDisplay = false
+
   }
 
+  getBasicDetail(){
+ 
+  //   const savedUserData:{
+  //     email:string;
+  //     _token:string;
+  //     _tokenExpirationDate:Date
+  // } = JSON.parse(localStorage.getItem('userInfo'));
+  this.homeService.getBasicDetails(this.savedUserInfo.email).subscribe(respData => {
+    this.homeService.needBasicDetail=false
+    console.log(respData);
+   
+    this.rcvdProfile ={
+        
+      "firstName":respData.firstName,
+      "lastName":respData.lastName,
+      "dob":respData.dob,
+      "age":0,
+      "address":"",
+      "district":"",
+      "state":"",
+      "country":"",
+      "email":respData.email,
+      "contactNum":"",
+      "panCrdNum":"",
+      "memberId":"",
+      "dependents":
+      [
+      {
+      "memberId":"",
+      "firstName":"",
+      "lastName":"",
+      "dob":""
+      },
+      {
+      "memberId":"",
+      "firstName":"",
+      "lastName":"",
+      "dob":""
+      }
+      ]
+
+     }
+    // this.savedProfile = respData;
+    // this.getStates();
+    // this.getDistricts();
+      this.isNewUser = this.isLoaded =true;
+      
+    },
+    errorMsg => {
+      console.log(errorMsg);
+      this.isError = true;
+      this.error = errorMsg;
+     
+
+    })
+
+
+  }
+  
   getProfile(){
 
   
@@ -63,25 +148,21 @@ this.doNotDisplay = false
  this.isNewUser = this.authService.isNewUser;
    if(this.isNewUser){
     
-    const savedUserData:{
-      firstName:string;
-      lastName:string;
-      dateOfBirth:string;
-      email:string
-   } = JSON.parse(localStorage.getItem('userDetail'));
+       
      console.log("Inside Saved user data if")
-     console.log(savedUserData)
+     console.log(this.savedUserDetail)
+     
      this.rcvdProfile ={
         
-      "firstName":savedUserData.firstName,
-      "lastName":savedUserData.lastName,
-      "dob":savedUserData.dateOfBirth,
+      "firstName":this.savedUserDetail.firstName,
+      "lastName":this.savedUserDetail.lastName,
+      "dob":this.savedUserDetail.dateOfBirth,
       "age":0,
       "address":"",
       "district":"",
       "state":"",
       "country":"",
-      "emailId":savedUserData.email,
+      "email":this.savedUserDetail.email,
       "contactNum":"",
       "panCrdNum":"",
       "memberId":"",
@@ -104,28 +185,42 @@ this.doNotDisplay = false
      }
     
      console.log("name saved in cookie =>" + this.rcvdProfile.firstName)
+     this.isLoaded = true;
    }
+  
    else{
 
-    const savedUserData:{
-      email:string;
-      _token:string;
-      _tokenExpirationDate:Date
-  } = JSON.parse(localStorage.getItem('userInfo'));
 
-   this.homeService.getProfile(savedUserData.email).subscribe(
+  //   const savedUserData:{
+  //     email:string;
+  //     _token:string;
+  //     _tokenExpirationDate:Date
+  // } = JSON.parse(localStorage.getItem('userInfo'));
+  console.log('inside of getprofile'+this.savedUserInfo.email)
+   this.homeService.getProfile(this.savedUserInfo.email).subscribe(
+     
     respData => {
     console.log(respData);
      this.rcvdProfile=respData;
     // this.savedProfile = respData;
     this.getStates();
     this.getDistricts();
+    this.isLoaded = true;
       
     },
     errorMsg => {
       console.log(errorMsg);
-      this.isError = true;
-      this.error = errorMsg;
+
+     
+               if (errorMsg === 'Email not found'){
+                 console.log('Inside update profile comp getProfile() email not found case')
+            
+                this.getBasicDetail();
+          }
+          else{
+          this.isError = true;
+          this.error = errorMsg;
+          }
      
 
     }

@@ -3,6 +3,7 @@ import {  NgForm } from '@angular/forms';
 
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 
 
 @Component({
@@ -25,24 +26,25 @@ export class AuthComponent implements OnInit {
 
   loginMode(){
     
-    this.isSignUpMode = false;
+    this.isSignUpMode = this.showError= false;
     this.isLoginMode =true;
-    this.showError = false;
+    //this.showError = false;
 
   }
 
   signUpMode(){
     console.log("Inside Sign up mode()")
     this.isSignUpMode = true;
-    this.isLoginMode =false;
-    this.showError = false;
+    this.isLoginMode = this.showError =false;
+    // this.showError = false;
    
 
   }
 
   onSubmit(form:NgForm){
     
-    
+    console.log('this.isSignUpMode=>'+this.isSignUpMode)
+    console.log('this.isLoginMode=>'+this.isLoginMode)
     
     // const payLoad :{userName:string;password:string} = { 'userName':'abc@gmail.com', 'password':'123456789'};
     //console.log(form.value.email)
@@ -69,9 +71,10 @@ export class AuthComponent implements OnInit {
          console.log(errorMsg);
     this.error = errorMsg;
     this.showError = true;
+    
        }
       );
-      form.reset();
+      // form.reset();
     }
 
     if(this.isLoginMode){
@@ -92,7 +95,7 @@ export class AuthComponent implements OnInit {
      this.showError = true;
         }
        );
-       form.reset();
+      //  form.reset();
      }
     }
 

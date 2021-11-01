@@ -26,10 +26,15 @@ export class AuthGuard implements CanActivate{
          this.authService.user.subscribe(user => {
              this.currUser = user
          }).unsubscribe
+         console.log("this.curruser in guard=>")
+         console.log(this.currUser)
          if (!!this.currUser){
              return true
          }
-         return this.router.createUrlTree(['/auth'])
+
+        return this.router.createUrlTree(['/auth'])
+        // this.router.navigate(['/auth'])
+        // return false;
     }
 
 

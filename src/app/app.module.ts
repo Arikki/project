@@ -10,7 +10,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from  '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component'; 
 import { AuthInterceptorService } from './auth/auth.interceptor';
-import { RegistrationComponent } from './home/registration/registration.component';
+
 import { ClaimsComponent } from './home/claims/claims.component';
 import { UpdateProfileComponent } from './home/update-profile/update-profile.component';
 
@@ -20,7 +20,7 @@ import { UpdateProfileComponent } from './home/update-profile/update-profile.com
     AuthComponent,
     
     HomeComponent,
-         RegistrationComponent,
+         
          ClaimsComponent,
          UpdateProfileComponent
   ],

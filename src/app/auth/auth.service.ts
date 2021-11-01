@@ -2,10 +2,11 @@ import { EventEmitter, Injectable } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { HttpClient, JsonpClientBackend } from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
-import {throwError, Subject,BehaviorSubject } from 'rxjs';
+import {throwError, Subject,BehaviorSubject, Observable } from 'rxjs';
 import {User} from './user.model';
 import { Router } from "@angular/router";
 import { UserDetail } from "./userDetail.model";
+import * as moment from "moment";
 
 interface AuthResponseData{
     type :string;
@@ -25,23 +26,34 @@ export class AuthService{
     isNewUser = false;
     timeLengthExceeded:any;
     
+    
 constructor(private http: HttpClient, private router:Router){
 
 }
 
 
 
-signUp(form:NgForm){
+signUp(form:NgForm):Observable<AuthResponseData>{
 
     const userDetail = new UserDetail(form.value.firstName, form.value.lastName, form.value.dateOfBirth, form.value.email)
     localStorage.setItem('userDetail',JSON.stringify(userDetail))
-
+    // let currentAge = +moment(form.value.dateOfBirth, 'YYYY-MM-DD')
+    // .fromNow()
+    // .substring(0, 2);
   return this.http.post<AuthResponseData>('http://localhost:8080/signup',
     {
         
-        firstName:form.value.firstName,
+    //     firstName:form.value.firstName,
+    //     lastName:form.value.lastName,
+    //     dob:form.value.dateOfBirth,
+    //     age:currentAge,
+    //  email: form.value.email,
+    //  password: form.value.password
+
+          firstName:form.value.firstName,
         lastName:form.value.lastName,
-        dateOfBirth:form.value.dateOfBirth,
+        dob:form.value.dateOfBirth,
+    
      email: form.value.email,
      password: form.value.password
     
@@ -51,7 +63,7 @@ signUp(form:NgForm){
          errorResp => {
             let errorMsg = "An error occured!";
             if(!errorResp.error){
-                console.log("If")
+                console.log("I0f")
                 return throwError (errorMsg);
              }
 
@@ -60,6 +72,7 @@ signUp(form:NgForm){
             return throwError (errorMsg);
          }
      ), tap (respData => {
+         console.log("Inside tap=>" + respData)
          this.isNewUser = true;
          const expirationDate = new Date (new Date().getTime()+ +respData.tokenExpiresIn);
          const user = new User (respData.email, respData.token, expirationDate);

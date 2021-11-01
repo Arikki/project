@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 import { Claim } from '../claim.model';
 import { HomeService } from '../home.service';
 import { Profile } from '../profile.model';
@@ -16,6 +17,7 @@ export class ClaimsComponent implements OnInit {
  rcvdProfile:Profile = null;
  isUpdated:boolean=false;
  isError:boolean=false;
+ 
  memberDetails:{
   memberId:string;
   firstName:string
@@ -49,6 +51,8 @@ export class ClaimsComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute=() => {
       return false;
     }
+
+    this.getProfile();
   }
 
   onFocus(){
@@ -57,9 +61,13 @@ export class ClaimsComponent implements OnInit {
   }
 
   getProfile(){
-    if (!this.rcvdProfile){
+    const savedUserData:{
+      email:string;
+      _token:string;
+      _tokenExpirationDate:Date
+  } = JSON.parse(localStorage.getItem('userInfo'));
       
-      this.homeService.getProfile(this.email).subscribe(
+      this.homeService.getProfile(savedUserData.email).subscribe(
         respData => {
         console.log(respData);
          this.rcvdProfile=respData;
@@ -74,36 +82,44 @@ export class ClaimsComponent implements OnInit {
         },
         errorMsg => {
           console.log(errorMsg);
+          if (errorMsg === 'Email not found'){
+            
+            this.router.navigate(['/home','updateProfile'])
+          }
+          else{
           this.isError = true;
           this.error = errorMsg;
-    
+
+          }
         }
        );
-    }
+    
 }
 
 onSubmit(form:NgForm){
   console.log("Inside submit")
   
  this.claimsService
-    .submitClaim(this.rcvdProfile.emailId, form, this.selectedMember)
+    .submitClaim(this.rcvdProfile.email, form, this.selectedMember)
     .subscribe( 
       respData => {
         console.log(respData);
          this.claimDetails=respData;
-        // this.savedProfile = respData;
+        //  this.savedProfile = respData;
         
         this.isSubmitted = true;
         
           
         },
         errorMsg => {
+         
           console.log(errorMsg);
           this.isError = true;
           this.error = errorMsg;
-    
+         
         }
     )
+   
 }
 
 prePopulate(){

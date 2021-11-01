@@ -4,7 +4,7 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import { Profile } from "./profile.model";
 import { City, Country, State } from "country-state-city";
 
-fdescribe('HomeService',()=>{
+describe('HomeService',()=>{
 
     let homeService:HomeService;
     let httpTestingController:HttpTestingController;
@@ -18,7 +18,7 @@ fdescribe('HomeService',()=>{
               
             ]
         });
-
+        localStorage.clear()
         homeService = TestBed.inject(HomeService);
         httpTestingController = TestBed.inject(HttpTestingController);
 
@@ -32,7 +32,7 @@ fdescribe('HomeService',()=>{
             "age":26,
             "address":"Seattle",
             "district":"Washington",
-            "emailId":"ricky@gmail.com",
+            "email":"ricky@gmail.com",
             "state":"Washington",
             "country":"United Stats",
             "contactNum":"9874563210",
@@ -59,7 +59,7 @@ fdescribe('HomeService',()=>{
         homeService.getProfile("ricky@gmail.com").subscribe(
             profile => {
                 expect (profile).toBeTruthy;
-                expect (profile.emailId).toBe("ricky@gmail.com");
+                expect (profile.email).toBe("ricky@gmail.com");
             }
         );
 

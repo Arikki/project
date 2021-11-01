@@ -1,74 +1,17 @@
-
-<p>    </p>
-
-<div class="container">
-  <div class="row">
- <div class="col-xs-12">
-     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-        <div class="col-md-3 col-md-offset-3">
-            <div class="alert alert-danger" *ngIf=showError>
-                <p>{{error}}</p>
-            </div>
-          
-            <div class ="form-group" *ngIf="isSignUpMode">
-              <label>First Name:</label>
-                <input type ="text" id = "firstName" class="form-control" name = "firstName" placeholder="First Name" ngModel  />
-            </div>
-            <div class ="form-group" *ngIf="isSignUpMode">
-              <label>Last Name:</label>
-                <input type ="text" id = "lastName" class="form-control" name = "lastName" placeholder="Last Name" ngModel  />
-            </div>
-            <div class ="form-group" *ngIf="isSignUpMode">
-              <label>Date Of Birth:</label>
-                <input type = "date" id = "dateOfBirth" class="form-control" name = "dateOfBirth" placeholder="Date Of Birth" ngModel  />
-            </div>
-            <div class="form-group">
-              <!-- <label for="email" id="email" class="form-control">Email</label> -->
-              <label>Email Id:</label>
-              <input
-                type="email"
-                id="email"
-                class="form-control"
-                placeholder="Email"
-              ngModel
-              name = "email" 
-            
-              required
-              email
-                />
-            </div>
-            <div class="form-group">
-              <label>Password:</label>
-              <!-- <label for="password" id="password" class="form-control">Password</label> -->
-              <input
-                type="password"
-                id="password"
-                class="form-control"
-                placeholder="Password"
-                ngModel
-                name = "password"
-                required              
-              />
-            </div>
-           
-            <div>
-              <button class="btn btn-primary" type ="submit" [disabled] = "!loginForm.valid">{{isSignUpMode? 'SignUp':'Login'}}</button>
-            </div>
-            <br>
-            <div class="form-group" *ngIf="isLoginMode" >      
-            
-              
-               <!-- Don't have an account? <a routerLink="/signup">  Sign up </a> -->
-               Don't have an account? <a [routerLink]="" (click)="signUpMode()">Sign up</a>
-            </div>
-            <div class="form-group" *ngIf="isSignUpMode" >   
-            
-              
-               Back to <a [routerLink]="" (click)="loginMode()">Login</a>
-             </div>
-          </div>
-     </form>
- </div>
- 
+<div class="login-page">
+  <div class="form" >
+    <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">   
+      <div class="alert alert-danger" *ngIf=showError>
+          <p>{{error}}</p>
+      </div> 
+      <input type ="text" id = "firstName" class="form-control" name = "firstName" placeholder="First Name&#42;" ngModel  *ngIf="isSignUpMode" required/>
+      <input type ="text" id = "lastName" class="form-control" name = "lastName" placeholder="Last Name&#42;" ngModel  *ngIf="isSignUpMode" required/>
+      <input type = "text" id = "dateOfBirth" class="form-control" name = "dateOfBirth" placeholder="Date Of Birth&#42;" onfocus="(this.type='date')"  onblur="(this.type='text')" ngModel *ngIf="isSignUpMode" required />    
+      <input type="email" id="email" class="form-control" placeholder="Email&#42;" ngModel name = "email" required email/>
+      <input type="password" id="password" class="form-control" placeholder="Password&#42;" ngModel name = "password" required/>
+      <button class="btn btn-primary" type ="submit" [disabled] = "!loginForm.valid">{{isSignUpMode? 'SignUp':'Login'}}</button>
+      <p class="message" *ngIf="isLoginMode">Not registered?<a [routerLink]="" (click)="signUpMode()">Create an account</a></p>
+      <p class="message" *ngIf="isSignUpMode">Already registered?<a [routerLink]="" (click)="loginMode()">Login</a></p>
+    </form>
   </div>
 </div>

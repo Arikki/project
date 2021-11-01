@@ -23,11 +23,11 @@ export class ClaimsService{
     constructor(private http: HttpClient){}
 
 
-    submitClaim(emailId:string,form:NgForm, selectedMember:SelectedMember ){
+    submitClaim(email:string,form:NgForm, selectedMember:SelectedMember ){
 
         return this.http.post<Claim>('http://localhost:8080/claims', 
         {
-            emailId:emailId,
+            email:email,
             memberId:selectedMember.memberId,
             firstName:selectedMember.firstName,
             lastName:selectedMember.lastName,
@@ -44,9 +44,10 @@ export class ClaimsService{
               console.log(errorResp);
               let errorMsg = 'An error occured!';
               if (!errorResp.error) {
+                
                 return throwError(errorMsg);
               }
-    
+              
               return throwError(errorResp.error.message);
             })
           )

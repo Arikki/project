@@ -4,7 +4,7 @@ import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ClaimsComponent } from './home/claims/claims.component';
 import { HomeComponent } from './home/home.component';
-import { RegistrationComponent } from './home/registration/registration.component';
+
 import { UpdateProfileComponent } from './home/update-profile/update-profile.component';
 
 
@@ -14,7 +14,7 @@ const routes: Routes = [
 
   
   {path: 'home', component: HomeComponent,
-  children: [{path: 'register', component:RegistrationComponent},
+  children: [
             {path: 'updateProfile', component:UpdateProfileComponent},
             {path:'claims',component:ClaimsComponent}
             ],
@@ -22,7 +22,7 @@ const routes: Routes = [
   canActivate:[AuthGuard]
 },
 
-{path:'register', component:RegistrationComponent}
+
   
 ];
 

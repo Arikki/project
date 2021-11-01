@@ -1,27 +1,7 @@
-<br>
-<h1>Submit Claims</h1>
-    <div class="container" *ngIf="!rcvdProfile">
-        <div class="alert alert-danger" *ngIf="isError && !rcvdProfile">
-            <p class="text-center">{{error}}</p>
-        </div>
-        <!-- <div class="jumbotron vertical-center"> -->
-            <div class="well">
-            <!-- <div class="alert alert-danger" *ngIf=error>
-                <p>{{error}}</p>
-            </div> -->
-            
-            <label for="email">Please enter registered Email Id:</label>
-            <!-- <input type="email"  id = "email"  class="form-control" name = "email" placeholder="Email ID"   [(ngModel)]="currUser.email" value = "{{currUser.email}}" disabled> -->
-            <input type="text"  id = "email"  class="form-control" name = "email" placeholder="Email Id" (focus)="onFocus()" [(ngModel)]="email" (keyup.enter)="getProfile()" style="width:40%"> 
-     
-        </div>
-        <div class="text-center"  >
-            <button class="btn btn-primary" type ="submit" (click)="getProfile()">Search</button>
-            </div>
-            
-    </div>
-
-    <form   #claimForm="ngForm" *ngIf="rcvdProfile" (ngSubmit)="onSubmit(claimForm)" >
+<div class="claim-page">
+    <div class="form" >
+      <p><strong>Claim Form</strong></p>
+      <form class="claim-form" #claimForm="ngForm" *ngIf="rcvdProfile" (ngSubmit)="onSubmit(claimForm)" >   
         <div class="alert alert-danger" *ngIf="isError && !isSubmitted">
             <p class="text-center">{{error}}</p>
         </div>
@@ -29,59 +9,22 @@
             <p class="text-center">Submitted Successfully! Claim Number:{{claimDetails.claimNumber}}</p>
             
         </div>
-        <div class = "form-row ">
-            <div class="form-group col-md-4">
-                <label for="email">Email Id:</label>
-                <input type="text"  id = "email"  class="form-control" name = "email" placeholder="Email"  [value]="rcvdProfile.emailId"  disabled>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="memberId">Member Id:</label>
-                <select id = "memberId" name = "memebrId" [(ngModel)]="selectedMemberId" style="width:100%" (change)="prePopulate()">
-                    <option *ngFor="let item of memberDetails" value = "{{item.memberId}}">{{item.memberId}}</option>
-                </select>
-            </div>
-            <div class="form-group col-md-2" *ngIf = "showDetails" >
-                <label for="firstName">First Name:</label>
-                <input type="text"  id = "firstName"  class="form-control" name = "firstName" placeholder="First Name"  [value]="selectedFirstName"  disabled>
-            </div>
-            <div class="form-group col-md-2" *ngIf = "showDetails" >
-                <label for="lastName">Last Name:</label>
-                <input type="text"  id = "lastName"  class="form-control" name = "lastName" placeholder="Last Name"  [value]="selectedLastName"  disabled>
-            </div>
-            <div class="form-group col-md-2" *ngIf = "showDetails" >
-                <label for="dob">Date of Birth:</label>
-                <input type="date"  id = "dob"  class="form-control" name = "dob" placeholder="Date of Birth"  [value]="selectedDob"  disabled>
-            </div>
-        </div>
-       
-
-        <div class = "form-row" *ngIf = "showDetails">
-            <div class="form-group col-md-4">
-                <label for="providerName">Provider Name:</label>
-                <input type="text"  id = "providerName"  class="form-control" name = "providerName" placeholder="Provider Name" ngModel>
-            </div>
-            <div class="form-group col-md-2"  >
-                <label for="admissionDate">Admission Date:</label>
-                <input type="date"  id = "admissionDate"  class="form-control" name = "admissionDate" placeholder="Admission Date" ngModel >
-            </div>
-            <div class="form-group col-md-2"  >
-                <label for="dischargeDate">Discharge Date:</label>
-                <input type="date"  id = "dischargeDate"  class="form-control" name = "dischargeDate" placeholder="Discharge Date"  ngModel>
-            </div>
-            <div class="form-group col-md-2"  >
-                <label for="amount">Bill Amount:</label>
-                <input type="text"  id = "amount"  class="form-control" name = "amount" placeholder="Amount"  ngModel>
-            </div>
-            <div class="form-group col-md-5">
-                <!-- <label for="memberId2">Member Id (Dependent 2):</label>
-                <input type="text"  id="memberId2" class="form-control"  name = "memberId2" placeholder=" Dependent2's Member Id"  [(ngModel)]="rcvdProfile.dependents[1].memberId" disabled> -->
-          
-            </div>
-        </div> 
-
-        <div class = "form-row col-md-6" *ngIf = "showDetails && !isSubmitted">
-            <button class="btn btn-primary" type ="submit">Submit</button>
-        </div>
-
-
-    </form>
+        
+        <select id = "memberId" name = "memebrId" [(ngModel)]="selectedMemberId" style="width:100%" (change)="prePopulate()" required>
+            <option value="undefined" disabled hidden selected>Choose member id</option>
+            <option *ngFor="let item of memberDetails" value = "{{item.memberId}}">{{item.memberId}}</option>
+        </select>
+        
+        <input type="text"  id = "firstName"  class="form-control" name = "firstName" placeholder="First Name"  [value]="selectedFirstName" *ngIf = "showDetails" disabled>
+        
+        <input type="text"  id = "lastName"  class="form-control" name = "lastName" placeholder="Last Name"  [value]="selectedLastName" *ngIf = "showDetails" disabled>
+      
+        <input type="date"  id = "dob"  class="form-control" name = "dob" placeholder="Date of Birth"  [value]="selectedDob" *ngIf = "showDetails" disabled>
+        <input type="text"  id = "providerName"  class="form-control" name = "providerName" placeholder="Provider Name&#42;" *ngIf = "showDetails" ngModel required>
+        <input type="text"  id = "admissionDate"  class="form-control" name = "admissionDate" placeholder="Admission Date&#42;" onfocus="(this.type='date')"  onblur="(this.type='text')" *ngIf = "showDetails" ngModel required >
+        <input type="text"  id = "dischargeDate"  class="form-control" name = "dischargeDate" placeholder="Discharge Date&#42;" onfocus="(this.type='date')"  onblur="(this.type='text')" *ngIf = "showDetails" ngModel required>
+        <input type="text"  id = "amount"  class="form-control" name = "amount" placeholder="Amount&#42;" *ngIf = "showDetails" ngModel required>
+        <button class="btn btn-primary" type ="submit" [disabled] = "!claimForm.valid" *ngIf = "showDetails && !isSubmitted">Submit</button>
+      </form>
+    </div>
+  </div>

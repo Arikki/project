@@ -6,9 +6,9 @@ import { catchError } from 'rxjs/operators';
 import * as moment from "moment";
 
 
-
 @Injectable({providedIn:'root'})
 export class UpdateProfileService{
+  TestBed: any;
 
     constructor (private http:HttpClient ) {};
 
@@ -30,7 +30,7 @@ return this.http
     district: profile.district,
     state: profile.state,
     country: profile.country,
-    emailId: profile.emailId,
+    email: profile.email,
     contactNum: profile.contactNum,
     panCrdNum: profile.panCrdNum,
     memberId: profile.memberId,
@@ -78,7 +78,7 @@ console.log("Inside update")
         district: profile.district,
         state: profile.state,
         country: profile.country,
-        emailId: profile.emailId,
+        email: profile.email,
         contactNum: profile.contactNum,
         panCrdNum: profile.panCrdNum,
         memberId: profile.memberId,
@@ -113,5 +113,23 @@ console.log("Inside update")
 
     }
 
+    getBasicDetails(email:string){
+
+      return this.http.get('http://localhost:8080/authDetails/'+email,).pipe(
+        catchError((errorResp) => {
+          let errorMsg = "An error occured!";
+          if(!errorResp.error){
+              
+              return throwError (errorMsg);
+           }
+
+          errorMsg = errorResp.error.message;
+         
+          
+          return throwError (errorMsg);
+        })
+      );
+
+    }
 
 }
