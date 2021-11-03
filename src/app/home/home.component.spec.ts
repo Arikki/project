@@ -15,36 +15,29 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-let authServiceStub ={
+  let authServiceStub = {};
 
-}
-
-let homeServiceStub = {
-  
-}
+  let homeServiceStub = {};
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports:[
+      imports: [
         BrowserModule,
-       AppRoutingModule,
-       FormsModule,
-       HttpClientModule,
-       CommonModule, 
-       RouterTestingModule.withRoutes([])
-     ],
-      declarations: [ HomeComponent,
-      ClaimsComponent,
-    UpdateProfileComponent ],
-    providers:[
-      {provide:AuthService, useValue:authServiceStub},
-     {provide:HomeService, useValue:homeServiceStub}
-    ]
-    })
-    .compileComponents();
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        CommonModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      declarations: [HomeComponent, ClaimsComponent, UpdateProfileComponent],
+      providers: [
+        { provide: AuthService, useValue: authServiceStub },
+        { provide: HomeService, useValue: homeServiceStub },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    localStorage.clear()
+    localStorage.clear();
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -53,6 +46,4 @@ let homeServiceStub = {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
 });

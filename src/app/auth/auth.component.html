@@ -4,11 +4,28 @@
       <div class="alert alert-danger" *ngIf=showError>
           <p>{{error}}</p>
       </div> 
+
+ 
+      
       <input type ="text" id = "firstName" class="form-control" name = "firstName" placeholder="First Name&#42;" ngModel  *ngIf="isSignUpMode" required/>
       <input type ="text" id = "lastName" class="form-control" name = "lastName" placeholder="Last Name&#42;" ngModel  *ngIf="isSignUpMode" required/>
-      <input type = "text" id = "dateOfBirth" class="form-control" name = "dateOfBirth" placeholder="Date Of Birth&#42;" onfocus="(this.type='date')"  onblur="(this.type='text')" ngModel *ngIf="isSignUpMode" required />    
-      <input type="email" id="email" class="form-control" placeholder="Email&#42;" ngModel name = "email" required email/>
-      <input type="password" id="password" class="form-control" placeholder="Password&#42;" ngModel name = "password" required/>
+      
+     
+      <input type = "text" id = "dateOfBirth" class="form-control" name = "dateOfBirth" placeholder="Date Of Birth&#42;" #dateOfBirth="ngModel" onfocus="(this.type='date')"  onblur="(this.type='text'); validateDob()"   appAgeValidator  ngModel *ngIf="isSignUpMode" required />    
+     
+    
+      <span class="text-danger" *ngIf="email.invalid && email.touched && email.errors?.pattern">
+        Email Id must contain '@' and '.'
+    </span>
+      
+    <input type="email" id="email" class="form-control" placeholder="Email&#42;" ngModel name = "email" required pattern="^(.+)@(.+)\.(.+)$" #email="ngModel"/> 
+     
+      <span class="text-danger" *ngIf="password.invalid && password.touched && password.errors?.pattern">
+        Password should be atleast 8 characters and should contain at least one uppercase, one numeric and a symbol
+    </span>
+    
+      
+      <input type="password" id="password" class="form-control" placeholder="Password&#42;" ngModel name = "password"  pattern ="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$" required #password="ngModel"/>
       <button class="btn btn-primary" type ="submit" [disabled] = "!loginForm.valid">{{isSignUpMode? 'SignUp':'Login'}}</button>
       <p class="message" *ngIf="isLoginMode">Not registered?<a [routerLink]="" (click)="signUpMode()">Create an account</a></p>
       <p class="message" *ngIf="isSignUpMode">Already registered?<a [routerLink]="" (click)="loginMode()">Login</a></p>

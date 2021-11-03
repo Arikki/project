@@ -8,7 +8,7 @@ import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { AppRoutingModule } from '../app-routing.module';
-import { AppModule } from '../app.module';
+
 import { ClaimsComponent } from '../home/claims/claims.component';
 import { HomeComponent } from '../home/home.component';
 
@@ -17,7 +17,7 @@ import { UpdateProfileComponent } from '../home/update-profile/update-profile.co
 import { AuthComponent } from './auth.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import { UserDetail } from './userDetail.model';
+
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
@@ -64,8 +64,7 @@ describe('AuthComponent', () => {
   }
 
   beforeEach(async () => {
-    // const authServiceSpy = jasmine.createSpyObj('AuthService', ['login','signUp'])
-    //  const routerMock = {navigator:jasmine.createSpy('navigate')}
+   
     await TestBed.configureTestingModule({
       imports:[
         BrowserModule,
@@ -77,8 +76,7 @@ describe('AuthComponent', () => {
       ],
       declarations: [ AuthComponent ],
       providers:[
-        // {provide:AuthService, useValue:authServiceSpy},
-        //  { provide: Router, useValue: routerMock }
+       
         {provide:AuthService, useValue:authServiceStub},
         
 
@@ -128,12 +126,8 @@ component.isSignUpMode = true;
 component.isLoginMode = false;
 const navigateSpy = spyOn(router, 'navigate');
     component.onSubmit(inputForm);
-// authService.signUp();
+
 expect(navigateSpy).toHaveBeenCalledWith(['/home', 'updateProfile']);
-//  authService.signUp.and.returnValue(of(replyData));
-//  const form: any = debugElement.children[0].injector.get(NgForm)
-//  console.log("In auth.comp.spec.ts")
-//  console.log(form.value)
 
 
   })
@@ -161,8 +155,6 @@ fixture.detectChanges()
 
 expect(navigateSpy).toHaveBeenCalledWith(['/home', 'claims']);
 
-//  authService.signUp.and.returnValue(of(replyData));
-// fixture.detectChanges();
 
 
 

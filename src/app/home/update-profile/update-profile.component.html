@@ -34,10 +34,16 @@
         </select>
         <label for= "email">Email:</label>
         <input type="text"  id = "email"  class="form-control" name = "email" placeholder="Email Id"  [(ngModel)]="rcvdProfile.email" disabled> 
+        <span class="text-danger" *ngIf="contactNumber.invalid && contactNumber.touched && contactNumber.errors?.pattern">
+          Phone number must be in 10 digits
+        </span>
         <label for= "contactNumber">Contact Number:</label>
-        <input type="text"  id = "contactNumber"  class="form-control" name = "contactNumber" placeholder="Contact Number"  [(ngModel)]="rcvdProfile.contactNum" required>
+        <input type="text"  id = "contactNumber"  class="form-control" name = "contactNumber" placeholder="Contact Number"  [(ngModel)]="rcvdProfile.contactNum" pattern="^\d{10}$" required #contactNumber="ngModel">
+        <span class="text-danger" *ngIf="panCardNum.invalid && panCardNum.touched && panCardNum.errors?.pattern">
+          Pan card number must contain only alphabets and numbers (no spaces and symbols)
+        </span>
         <label for= "panCardNum">Pan Card Number:</label>
-        <input type="text"  id="panCardNum" class="form-control"  name = "panCardNum" placeholder="Pan Card Number"   [(ngModel)]="rcvdProfile.panCrdNum" required>
+        <input type="text"  id="panCardNum" class="form-control"  name = "panCardNum" placeholder="Pan Card Number"   [(ngModel)]="rcvdProfile.panCrdNum" #panCardNum="ngModel" pattern="^[a-zA-Z0-9]{12}$" required>
         <label for= "firstNameDep1">First Name(Dependent1):</label>
         <input type="text"  id="firstNameDep1" class="form-control"  name = "firstNameDep1" placeholder=" Dependent1's First Name"  [(ngModel)]="rcvdProfile.dependents[0].firstName" [disabled]="!isNewUser" required>
         <label for= "lastNameDep1">Last Name(Dependent1):</label>

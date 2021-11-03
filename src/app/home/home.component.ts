@@ -1,30 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {AuthService} from '../auth/auth.service'
+import { AuthService } from '../auth/auth.service';
 import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  error = '';
+  constructor(
+    private authService: AuthService,
+    private homeService: HomeService,
+    private router: Router
+  ) {}
+  isSignedUpUser = this.authService.isNewUser;
 
-  error='';
-  constructor(private authService:AuthService, private homeService:HomeService, private router:Router) { }
-  isSignedUpUser = this.authService.isNewUser; // this is to decide whether to display the register user 
+  ngOnInit(): void {}
 
-
-  ngOnInit(
-  ): void { 
-   
-   }
-
-  
-  onLogout(){
-    this.authService.logout()
-}
-
-
-
+  onLogout() {
+    this.authService.logout();
+  }
 }
